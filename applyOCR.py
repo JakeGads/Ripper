@@ -22,3 +22,15 @@ except:
         import Image
     
     import pytesseract
+
+def ocr_core(filename):
+    return pytesseract.image_to_string(Image.open(filename))  # We'll use Pillow's Image class to open the image and pytesseract to detect the string in the image
+
+'''
+TODO this a suprise that will help us latter
+
+from pdf2image import convert_from_path
+imgs = convert_from_path('path/to/your/file.pdf', 200)
+
+and imgs is a list of your pdf's pages as PIL image
+'''
