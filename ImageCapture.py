@@ -48,5 +48,13 @@ def findGoodBox():
             
     return box
 
+def findCommand():
+    print('''
+    we need to find the proper command to move to the next page
+    Enter 1 for a mouse click <The mouse must be in the proper location>
+    Enter 2 for a Right Arrow command
+    ''')
+    
+
 if __name__ == "__main__":
     box = findGoodBox()
