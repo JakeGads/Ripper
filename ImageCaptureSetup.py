@@ -1,6 +1,7 @@
 from subprocess import call
 try:
     import pyscreenshot as ImageGrab
+    import pyautogui
 except:
     try:
         call('python3 -m pip install -r requirments.txt')
@@ -9,6 +10,7 @@ except:
 
     try:
         import pyscreenshot as ImageGrab
+        import pyautogui
     except:
         print('Error finding packages please run the following command\n\tpip install -r requirments.txt\n\nNote on Linux system PIL must be downloaded through a package manager')
 
@@ -54,7 +56,22 @@ def findCommand():
     Enter 1 for a mouse click <The mouse must be in the proper location>
     Enter 2 for a Right Arrow command
     ''')
+    choice = int(input())
+
+    if choice is not 1 and choice is not 2:
+        findCommand()
     
+    if choice is 1:
+        location = pyautogui.position()
+        
+        return (True, pyautogui.click, location)
+
+    else:
+        return (False, pyautogui.press, 'Right')
+def main():
+    box = findGoodBox()
+    command = findCommand()
+    return (box, command)
 
 if __name__ == "__main__":
-    box = findGoodBox()
+    main()
