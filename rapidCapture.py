@@ -16,53 +16,48 @@ import pyautogui
 import pyscreenshot as ImageGrab
 
 
-
 def clear():
     if os.name == "Windows":
         os.system("cls")
     else:
         os.system("clear")
 
+
 clear()
+
 
 def build(name, wait, pages=None):
     box = ImageCaptureSetup.findGoodBox()
     tup = ImageCaptureSetup.findCommand()
 
-    """
-    try:
-        output = str(subprocess.check_output("cd temp", shell=True))
-        input(output)
-        
-        if 'no such file' in output:
-            None
-        else:
-            os.system('cd temp')
-            os.system("rm *")
-            os.system("cd ..")
-            os.system("rmdir temp")
-    except:
-        None
-    """
-
     os.system("mkdir temp")
-    os.system('rm temp/*')
+    os.system("rm temp/*")
     clear()
 
     counter = 0
 
-    sameImage = True
+    if pages:
+        for i in range(pages):
+            time.sleep(randint(0, wait))
+            capture(box, counter)
+            counter += 1
+            if tup[0]:
+                tup[1](tup[2][0], tup[2][1])
+            else:
+                tup[1](tup[2])
+    else:
+        sameImage = True
 
-    while sameImage:
-        time.sleep(randint(0, wait))
-        capture(box, counter)
-        counter += 1
-        if tup[0]:
-            tup[1](tup[2][0], tup[2][1])
-        else:
-            tup[1](tup[2])
+        while sameImage:
+            time.sleep(randint(0, wait))
+            capture(box, counter)
+            counter += 1
+            if tup[0]:
+                tup[1](tup[2][0], tup[2][1])
+            else:
+                tup[1](tup[2])
 
-        sameImage = doubleCheck(counter)
+            sameImage = doubleCheck(counter)
 
     generatePDF(name)
 
@@ -116,5 +111,9 @@ def generatePDF(name):
 if __name__ == "__main__":
     name = input("output file name: \t")
     wait = int(input("time pause between captures (seconds)\t"))
-    pages = int(input("How many pages\t"))
+    pages = None
+    try:
+        pages = int(input("How many pages\t"))
+    except:
+        None
     build(name, wait, pages=pages)
