@@ -1,28 +1,35 @@
-import ImageCaptureSetup
-import applyOCR
 import os
+import subprocess
 import time
 from random import randint
-import subprocess
 
 
-os.system('pip install -r requirments.txt --user')
-if os.name == 'Windows':
-    os.system('cls')
-else:
-    os.system('clear')
+import applyOCR
+import ImageCaptureSetup
 
+os.system("pip install -r requirments.txt --user")
 
-import pyscreenshot as ImageGrab
-import pyautogui
 import cv2
-import numpy as np
 import img2pdf
+import numpy as np
+import pyautogui
+import pyscreenshot as ImageGrab
 
-def build(name, wait):
+
+
+def clear():
+    if os.name == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+clear()
+
+def build(name, wait, pages=None):
     box = ImageCaptureSetup.findGoodBox()
     tup = ImageCaptureSetup.findCommand()
 
+    """
     try:
         output = str(subprocess.check_output("cd temp", shell=True))
         input(output)
@@ -36,13 +43,18 @@ def build(name, wait):
             os.system("rmdir temp")
     except:
         None
+    """
 
     os.system("mkdir temp")
-    os.system("cd temp")
+    os.system('rm temp/*')
+    clear()
+
     counter = 0
 
-    while doubleCheck(counter):
-        time.sleep(randint(0,wait))
+    sameImage = True
+
+    while sameImage:
+        time.sleep(randint(0, wait))
         capture(box, counter)
         counter += 1
         if tup[0]:
@@ -50,15 +62,17 @@ def build(name, wait):
         else:
             tup[1](tup[2])
 
+        sameImage = doubleCheck(counter)
+
     generatePDF(name)
 
 
 def doubleCheck(counter):
     try:
         # Loads both images into RAM
-        new = cv2.imread("{counter}.jpg".format(counter=counter))
+        new = cv2.imread("temp/{counter}.jpg".format(counter=counter))
         previous = cv2.imread(
-            "{counter_minus_one}.jpg".format(counter_minus_one=counter - 1)
+            "temp/{counter_minus_one}.jpg".format(counter_minus_one=counter - 1)
         )
 
         # checks to see if they are the same shape
@@ -88,18 +102,19 @@ def doubleCheck(counter):
 
 def capture(box, counter):
     im = ImageGrab.grab(bbox=box)
-    im.save("Page{num}.jpg".format(num=counter))
+    im.save("temp/Page{num}.jpg".format(num=counter))
 
 
 def generatePDF(name):
-    if '.pdf' not in name:
-        name += '.pdf'
-    
-    with open (name, 'wb') as f:
-        f.write(img2pdf.convert([i for i in os.listdir('temp') if i.endswith(".jpg")]))
+    if ".pdf" not in name:
+        name += ".pdf"
+
+    with open(name, "wb") as f:
+        f.write(img2pdf.convert([i for i in os.listdir("temp") if i.endswith(".jpg")]))
 
 
 if __name__ == "__main__":
-    name = input('output file name: \t')
-    wait = int(input('time pause between captures (seconds)\t'))
-    build(name, wait)
+    name = input("output file name: \t")
+    wait = int(input("time pause between captures (seconds)\t"))
+    pages = int(input("How many pages\t"))
+    build(name, wait, pages=pages)
