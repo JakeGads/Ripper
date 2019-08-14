@@ -3,46 +3,40 @@ import applyOCR
 import os
 import time
 from random import randint
-from subprocess import call
+import subprocess
 
 
-try:
-    import pyscreenshot as ImageGrab
-    import pyautogui
-    import cv2
-    import numpy as np
-    import img2pdf
-except:
-    try:
-        call("python3 -m pip install -r requirments.txt --user")
-    except:
-        call("python -m pip install -r requirments.txt --user")
+os.system('pip install -r requirments.txt --user')
+if os.name == 'Windows':
+    os.system('cls')
+else:
+    os.system('clear')
 
-    try:
-        import pyscreenshot as ImageGrab
-        import pyautogui
-        import cv2
-        import numpy as np
-    except:
-        print(
-            "Error finding packages please run the following command\n\tpip install -r requirments.txt\n\nNote on Linux system PIL must be downloaded through a package manager"
-        )
 
+import pyscreenshot as ImageGrab
+import pyautogui
+import cv2
+import numpy as np
+import img2pdf
 
 def build(name, wait):
     box = ImageCaptureSetup.findGoodBox()
     tup = ImageCaptureSetup.findCommand()
 
-    try:
-        call("cd temp")
-        call("rm *")
-        call("cd ..")
-        call("rmdir temp")
-    except:
+    
+    output = str(subprocess.check_output("cd temp", shell=True))
+    input(output)
+    
+    if 'no such file' in output:
         None
+    else:
+        os.system('cd temp')
+        os.system("rm *")
+        os.system("cd ..")
+        os.system("rmdir temp")
 
-    call("mkdir temp")
-    call("cd temp")
+    os.system("mkdir temp")
+    os.system("cd temp")
     counter = 0
 
     while doubleCheck(counter):
