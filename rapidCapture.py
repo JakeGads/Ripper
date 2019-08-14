@@ -23,17 +23,19 @@ def build(name, wait):
     box = ImageCaptureSetup.findGoodBox()
     tup = ImageCaptureSetup.findCommand()
 
-    
-    output = str(subprocess.check_output("cd temp", shell=True))
-    input(output)
-    
-    if 'no such file' in output:
+    try:
+        output = str(subprocess.check_output("cd temp", shell=True))
+        input(output)
+        
+        if 'no such file' in output:
+            None
+        else:
+            os.system('cd temp')
+            os.system("rm *")
+            os.system("cd ..")
+            os.system("rmdir temp")
+    except:
         None
-    else:
-        os.system('cd temp')
-        os.system("rm *")
-        os.system("cd ..")
-        os.system("rmdir temp")
 
     os.system("mkdir temp")
     os.system("cd temp")
@@ -99,5 +101,5 @@ def generatePDF(name):
 
 if __name__ == "__main__":
     name = input('output file name: \t')
-    wait = int(input('time pause between captures (seconds)'))
+    wait = int(input('time pause between captures (seconds)\t'))
     build(name, wait)
