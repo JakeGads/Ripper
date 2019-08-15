@@ -41,6 +41,7 @@ def build(name, wait, pages=None):
             time.sleep(randint(0, wait))
             capture(box, counter)
             counter += 1
+            print()
             if tup[0]:
                 tup[1](tup[2][0], tup[2][1])
             else:
@@ -101,11 +102,13 @@ def capture(box, counter):
 
 
 def generatePDF(name):
-    if ".pdf" not in name:
-        name += ".pdf"
-
-    with open(name, "wb") as f:
-        f.write(img2pdf.convert([i for i in os.listdir("temp") if i.endswith(".jpg")]))
+    from fpdf import FPDF
+    pdf = FPDF()
+    # imagelist is the list with all image filenames
+    for image in imagelist:
+        pdf.add_page()
+        pdf.image(image,x,y,w,h)
+    pdf.output("yourfile.pdf", "F")
 
 
 if __name__ == "__main__":

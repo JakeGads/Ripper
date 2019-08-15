@@ -1,5 +1,6 @@
 coin==0.23
 EasyProcess==0.2.7
+fpdf==1.7.2
 img2pdf==0.3.3
 MouseInfo==0.0.4
 numpy==1.17.0
