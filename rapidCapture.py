@@ -111,7 +111,7 @@ def generatePDF(name):
     pdf.output("yourfile.pdf", "F")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  
     name = input("output file name: \t")
     wait = int(input("time pause between captures (seconds)\t"))
     pages = None
