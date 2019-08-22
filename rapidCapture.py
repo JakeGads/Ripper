@@ -7,8 +7,6 @@ from random import randint
 import applyOCR
 import ImageCaptureSetup
 
-os.system("pip install -r requirments.txt --user")
-
 import cv2
 import img2pdf
 import numpy as np
@@ -30,18 +28,19 @@ def build(name, wait, pages=None):
     box = ImageCaptureSetup.findGoodBox()
     tup = ImageCaptureSetup.findCommand()
 
-    os.system("mkdir temp")
-    os.system("rm temp/*")
     clear()
 
     counter = 0
+
+    print("You have 10 seconds to configure everything ... good luck my guy")
+    time.sleep(10)
 
     if pages:
         for i in range(pages):
             time.sleep(randint(0, wait))
             capture(box, counter)
             counter += 1
-            print()
+            print('captured {i}'.format(i=i))
             if tup[0]:
                 tup[1](tup[2][0], tup[2][1])
             else:
@@ -57,7 +56,7 @@ def build(name, wait, pages=None):
                 tup[1](tup[2][0], tup[2][1])
             else:
                 tup[1](tup[2])
-
+            print('captured {}'.format(counter))
             sameImage = doubleCheck(counter)
 
     generatePDF(name)
@@ -66,9 +65,9 @@ def build(name, wait, pages=None):
 def doubleCheck(counter):
     try:
         # Loads both images into RAM
-        new = cv2.imread("temp/{counter}.jpg".format(counter=counter))
+        new = cv2.imread("{counter}.jpg".format(counter=counter))
         previous = cv2.imread(
-            "temp/{counter_minus_one}.jpg".format(counter_minus_one=counter - 1)
+            "{counter_minus_one}.jpg".format(counter_minus_one=counter - 1)
         )
 
         # checks to see if they are the same shape
@@ -98,17 +97,31 @@ def doubleCheck(counter):
 
 def capture(box, counter):
     im = ImageGrab.grab(bbox=box)
-    im.save("temp/Page{num}.jpg".format(num=counter))
+    im.save("Page{num}.jpg".format(num=counter))
 
 
 def generatePDF(name):
     from fpdf import FPDF
+    import glob
+
+    if '.pdf' not in name:
+        name += ".pdf"
+
     pdf = FPDF()
     # imagelist is the list with all image filenames
+
+    imagelist = [f for f in glob.glob("*.jpg")]
+
+    counter = 0
+    # adds the image to a new page and then deletes the image from the hardrive
     for image in imagelist:
         pdf.add_page()
-        pdf.image(image,x,y,w,h)
-    pdf.output("yourfile.pdf", "F")
+        pdf.image(image)
+        os.remove(image)
+        print("PAGE {} ADDED".format(counter))
+        counter += 1
+        
+    pdf.output(name, "F")
 
 
 if __name__ == "__main__":  
@@ -119,4 +132,5 @@ if __name__ == "__main__":
         pages = int(input("How many pages\t"))
     except:
         None
+    
     build(name, wait, pages=pages)

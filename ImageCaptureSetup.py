@@ -59,16 +59,20 @@ def findGoodBox():
 
 
 def findCommand():
-    print(
+    try:
+        print(
+            """
+        we need to find the proper command to move to the next page
+        Enter 1 for a mouse click <The mouse must be in the proper location>
+        Enter 2 for a Right Arrow Command
+        Enter 3 for a Page Down Command
         """
-    we need to find the proper command to move to the next page
-    Enter 1 for a mouse click <The mouse must be in the proper location>
-    Enter 2 for a Right Arrow command
-    """
-    )
-    choice = int(input())
-
-    if choice is not 1 and choice is not 2:
+        )
+        choice = int(input())
+    except:
+        print('We are looking for an integer')
+        findCommand()
+    if choice is not 1 and choice is not 2 and choice is not 3:
         findCommand()
 
     if choice is 1:
@@ -76,9 +80,11 @@ def findCommand():
 
         return (True, pyautogui.click, location)
 
-    else:
+    elif choice is 2:
         return (False, pyautogui.press, "Right")
 
+    elif choice is 3:
+        return(False, pyautogui.press, 'pagedown')
 
 def main():
     box = findGoodBox()
