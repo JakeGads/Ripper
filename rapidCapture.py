@@ -28,6 +28,10 @@ def build(name, wait, pages=None):
     box = ImageCaptureSetup.findGoodBox()
     tup = ImageCaptureSetup.findCommand()
 
+    file = open('previous_setup.txt', 'w+')
+    file.write(str(box))
+    file.close()
+
     clear()
 
     counter = 0

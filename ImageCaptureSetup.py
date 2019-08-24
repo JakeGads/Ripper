@@ -51,7 +51,7 @@ def findGoodBox():
             x1 = int(input("X1: Current Val: {}\tNew Val: ".format(x1)))
             y1 = int(input("Y1: Current Val: {}\tNew Val: ".format(y1)))
             x2 = int(input("X2: Current Val: {}\tNew Val: ".format(x2)))
-            y2 = int(input("Y2: Current Val: {}\tNew Val: ".format(y1)))
+            y2 = int(input("Y2: Current Val: {}\tNew Val: ".format(y2)))
 
             box = (x1, y1, x2, y2)
 
